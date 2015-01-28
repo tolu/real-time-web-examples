@@ -1,0 +1,62 @@
+VIDEO:
+Google I_O 2012 - WebRTC- Real-time Audio_Video and P2P in HTML5
+
+ARTICLES:
+http://blog.pusher.com/what-came-before-websockets/
+
+
+ --- COMET
+ 	http://en.wikipedia.org/wiki/Comet_(programming)
+[Ajax push, Reverse Ajax, Two-way-web, HTTP_Streaming & HTTP Server Push]
+
+
+web application model for server push
+umbrella term for many techniques
+
+-- Techniques
+ Hidden iframe (forever frame)
+ 	iframe links to url that never ends
+ 	page is sent as chunked blocks of script-tags containg js to be executed
+ 	since browsers render HTML pages incrementally, each script-tag is executed as it is recieved
+ 	+ works in every common browser
+ 	- lack of reliable error handling
+ 	- impossible tracking of the state of the request calling process
+
+ Ajax polling
+ 	1. setInterval-technique
+ 	- what if it takes server longer than X seconds to 	respond?
+ 	2. setTimeout-technique
+ 	- alot of wasted connections
+
+ Ajax with long polling
+ 	http://techoctave.com/c7/posts/60-simple-long-polling-example-with-javascript-and-jquery
+
+Forever Frame
+http://project70.com/nodejs/node-js-comet-real-time-chat-a-great-first-project/
+http://cometdaily.com/2007/11/05/the-forever-frame-technique/
+
+SSE
+http://www.html5rocks.com/en/tutorials/eventsource/basics/
+http://dev.w3.org/html5/eventsource/
+
+sockets
+http://www.html5rocks.com/en/tutorials/casestudies/sunlight_streamcongress/
+http://www.html5rocks.com/en/tutorials/websockets/basics/
+http://www.instapaper.com/read/361842165
+http://socket.io/#how-to-use
+http://www.websocket.org/quantum.html
+
+webrtc
+http://www.html5rocks.com/en/tutorials/webrtc/basics/
+
+
+HTML and RealTime
+
+-ORTC
+	open real time connectivity
+	(websockets, comet, polling, database)
+
+-xRTML
+	manage ORTC connecions
+	manages messages
+	manipulatesd the DOM
