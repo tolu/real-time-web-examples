@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SSE</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+	<h2>SSE's this way!</h2>
+
+	<div id="main">
+
+		<div class="update">
+			Send update<br/>
+			<input class="update-message" type="text" value="">
+			<button data-method="sendUpdate">!update!</button>
+		</div>
+
+		<div class="sse">
+			<button data-method="startSSE">start SSE</button>
+		</div>
+
+	</div>
+
+
+	<script type="text/javascript">
+		
+		/*
+
+		SSE
+		handeld directly by browser so the user only has to listen for changes. Sent over HTTP so can be used by all.
+
+		*/
+
+		var lastMessage;
+		function sendUpdate () {
+			lastMessage = $('.update-message').val();
+			$.post("resolve", { msg : lastMessage }, function (data) {
+				$('.update-message').val('');
+				console.log(data);
+			});
+		}
+
+		var source;
+		function startSSE () {
+			if(!source){
+				source = new EventSource('/stream');
+
+				source.onmessage = function(e) {
+					var prefix = '';
+					if(lastMessage === e.data){
+						prefix = 'Me: ';
+					}
+					$('body').append(prefix + e.data + '<br>');
+				};
+				
+				source.onopen = function(e) {
+					console.log('sse onopen',e);
+				};
+				source.onerror = function(e) {
+					console.error('sse onerror', e);
+				};
+			} else {
+				source.close();
+				source = null;
+				startSSE();
+			}
+		}
+
+		// hook up some events
+		$(function () {
+			$("#main button").on('click', function (e) {
+				window[$(e.target).data('method')]();
+			});
+			$('.update-message').on("keyup", function(e){
+				if(e.keyCode === 13){
+					sendUpdate();
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>

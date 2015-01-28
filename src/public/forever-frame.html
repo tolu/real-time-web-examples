@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Forever Frame</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+	<h2>Ahoy Framers!</h2>
+	
+	<div id="main">
+
+		<div class="update">
+			Send update<br/>
+			<input class="update-message" type="text" value="">
+			<button data-method="sendUpdate">!update!</button>
+		</div>
+
+		<div>
+			<button data-method="injectIFrame">set iframe src</button>
+		</div>
+
+	</div>
+
+	<iframe class="forever-frame" src="" style="display:none;"></iframe>
+
+	<script type="text/javascript">
+		
+		window.onnewdata = function (data) {
+			$('body').append(data + '<br>');
+		}
+
+		function injectIFrame () {
+			$('.forever-frame').attr('src', '/foreverframe');
+		}
+
+		function sendUpdate () {
+			var msg = $('.update-message').val();
+			$.post("resolve", { msg : msg });
+			$('.update-message').val('');
+		}
+
+		// hook up some events
+		$(function () {
+			$("#main button").on('click', function (e) {
+				window[$(e.target).data('method')]();
+			});
+			$('.update-message').on("keyup", function(e){
+				if(e.keyCode === 13){
+					sendUpdate();
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>

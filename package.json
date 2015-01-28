@@ -1,0 +1,29 @@
+{
+  "name": "real-time-web-examples",
+  "version": "1.0.0",
+  "description": "collection of node servers implementing different real time techniques",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tolu/real-time-web-examples.git"
+  },
+  "keywords": [
+    "node",
+    "real-time",
+    "WebRTC",
+    "socket"
+  ],
+  "author": "Tobias Lundin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tolu/real-time-web-examples/issues"
+  },
+  "homepage": "https://github.com/tolu/real-time-web-examples",
+  "dependencies": {
+    "express": "^3.1.0",
+    "socket.io": "^0.9.13"
+  }
+}

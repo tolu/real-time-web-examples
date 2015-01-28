@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Polling</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+</head>
+<body>
+	<h2>Heeeey Pollers!</h2>
+
+	<div id="main">
+
+		<div class="poll-interval">
+			Poll interval<br/>
+			<input type="text" value="3000">
+		</div>
+
+		<div class="update">
+			Send update<br/>
+			<input class="update-message" type="text" value="">
+			<button data-method="sendUpdate">!update!</button>
+		</div>
+
+		<div class="polling">
+			<button data-method="startPollInterval">start poll interval</button>
+			<button data-method="startPollTimeout">start poll timeout</button>
+		</div>
+	</div>
+
+
+	<script type="text/javascript">
+		
+		/*
+		
+		notera att vid pollning kan data förloras då flera uppdateringar sker inom loppet av poll-tiden
+		Kan såklart lösas av serversidan men men...
+
+		*/
+
+		var lastUpdate,
+			pollInterval;
+
+		function getTime () {
+			return parseInt($('input').val());
+		}
+
+		function poll () {
+			return $.ajax({
+				url: "poll", 
+				data : { time : lastUpdate }
+			}).done(function (data) {
+				if(!!data){
+					$('body').append(data.text + '<br/>');
+					lastUpdate = data.time;
+				}
+			});
+		}
+
+		function startPollInterval () {
+			if(pollInterval){
+				clearInterval(pollInterval);
+			}
+			pollInterval = setInterval(poll, getTime());
+		}
+
+		function startPollTimeout () {
+			(function foreverPoll () {
+				setTimeout(function () {
+					poll().always(foreverPoll);
+				}, getTime());
+			}());
+		}
+
+		function sendUpdate () {
+			console.log('send update');
+			var msg = $('.update-message').val();
+			$.post("resolve", { msg : msg });
+			$('.update-message').val('');
+		}
+		
+
+		$(function () {
+			$("#main button").on('click', function (e) {
+				window[$(e.target).data('method')]();
+			});
+			$('.update-message').on("keyup", function(e){
+				if(e.keyCode === 13){
+					sendUpdate();
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>

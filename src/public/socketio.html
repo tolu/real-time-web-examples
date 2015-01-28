@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>SocketIO</title>
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+	<h2>Welcome to the Socket Lab!</h2>
+
+	<div id="main">
+		<div class="update">
+			Send update<br/>
+			<input class="update-message" type="text" value="">
+			<button data-method="sendUpdate">!update!</button>
+		</div>
+
+		<div>
+			<button data-method="openSocket">open socket</button>
+		</div>
+
+	</div>
+
+
+	<script type="text/javascript">
+		var socket;
+		function openSocket () {
+			socket = io.connect('http://localhost:5000');
+			
+			socket.on('news', function (data) {
+				$('body').append(data.msg + '<br/>');
+				socket.emit('server log', { msg : 'that went well!' });
+			});
+
+			socket.on('bounce', function (data) {
+				$('body').append('bounced from server: ' + data.msg + '<br/>');
+			});
+		}
+
+		function sendUpdate(){
+			if(socket){
+				socket.emit('bounce back', { my: $('.update-message').val() });
+				$('.update-message').val('');
+			}			
+		}
+
+		// hook up some events
+		$(function () {
+			$("#main button").on('click', function (e) {
+				window[$(e.target).data('method')]();
+			});
+			$('.update-message').on("keyup", function(e){
+				if(e.keyCode === 13){
+					sendUpdate();
+				}
+			});
+		});
+
+	</script>
+</body>
+</html>
