@@ -15,3 +15,7 @@ Slides: http://slides.com/tolu/real-time-web
 * Flash sockets
 * SignalR
 * Update: express / socket.io
+
+## License
+
+MIT @ https://tolu.mit-license.org/
